@@ -18,7 +18,11 @@ error_reporting(E_ALL);
 			$query = $this->db->get($table_name);
 			return $query->result(); 
 		}
-
+		public function show_where_tcf($table_name,$condition,$value){
+			$this->db->where($condition,$value);
+			$query = $this->db->get($table_name);
+			return $query->result(); 
+		}
 		function insert_batch($table_name, $data)
 		{
 			$this->db->insert_batch($table_name, $data);

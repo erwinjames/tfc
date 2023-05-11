@@ -117,23 +117,49 @@ public function mlecs_show(){
 
 public function mlecs_show_list()
 {
-    $data = $this->Quires->show('mlecs_record');
+    $data = $this->Quires->show_where_tcf('tcf_record','review_status',1);
     $output = '';
     $table_ids = array(); // array to store the unique table_id values
     foreach ($data as $row) {
         // check if the current row's table_id is already in the array
-        if (!in_array($row->table_id, $table_ids)) {
+        if (!in_array($row->tcf_record_table_id, $table_ids)) {
             // add the table_id to the array
-            $table_ids[] = $row->table_id;
+            $table_ids[] = $row->tcf_record_table_id;
             // display the row
             $output .= '
                 <tr>
-                    <td>' . sprintf("%03d", $row->mlecs_record_f_list_id) . '</td>
-                    <td><a  id="'.$row->table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal">' . $row->ao_date . '</a></td>
+                    <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
+                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal">' . $row->tcf_list_id . '</a></td>
                     <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center" class="pdfPrint"  id="'.$row->table_id.'"><i class="fa fa-print" aria-hidden="true"></i></a>
+                    <a style="font-size:20px;text-align:center" class="pdfPrint"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-print" aria-hidden="true"></i></a>
                     &nbsp
-                    <a style="font-size:20px;text-align:center" class="pdfDownload"  id="'.$row->table_id.'"><i class="fa fa-download" aria-hidden="true"></i></a>
+                    <a style="font-size:20px;text-align:center" class="pdfDownload"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-download" aria-hidden="true"></i></a>
+                    </td>
+                </tr>
+            ';
+        }
+    }
+    echo $output;
+}
+public function mlecs_show_list_review()
+{
+    $data = $this->Quires->show_where_tcf('tcf_record','review_status',0);
+    $output = '';
+    $table_ids = array(); // array to store the unique table_id values
+    foreach ($data as $row) {
+        // check if the current row's table_id is already in the array
+        if (!in_array($row->tcf_record_table_id, $table_ids)) {
+            // add the table_id to the array
+            $table_ids[] = $row->tcf_record_table_id;
+            // display the row
+            $output .= '
+                <tr>
+                    <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
+                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal1">' . $row->tcf_list_id . '</a></td>
+                    <td style="text-align:center;"> 
+                    <a style="font-size:20px;text-align:center" class="select-record" data-toggle="modal" data-target="#cartModal1"  id="'.$row->tcf_record_table_id.'">
+                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    </a>
                     </td>
                 </tr>
             ';
@@ -145,9 +171,9 @@ public function mlecs_show_list()
     public function mlecs_show_record_data() {
         $record_id = $this->input->post('record_id');
         $this->db->select('*');
-        $this->db->from('mlecs_record');
-        $this->db->join('mlecs_list', 'mlecs_record.mlecs_record_f_list_id = mlecs_list.mlecs_list_id', 'inner');
-        $this->db->where('mlecs_record.table_id', $record_id);
+        $this->db->from('tcf_record');
+        $this->db->join('tcf_list', 'tcf_record.tcf_list_id = tcf_list.tcf_list_id', 'inner');
+        $this->db->where('tcf_record.tcf_record_table_id', $record_id);
         $query = $this->db->get();
         $data = $query->result();
         $output = '';
@@ -199,6 +225,69 @@ public function mlecs_show_list()
 <div class="modal-footer border-top-0 d-flex justify-content-between">
     <a id="' . $record_id . '" class="pdfPrint btn btn-success"><i class="fa fa-print" aria-hidden="true"></i></a>
     <a id="' . $record_id . '" class="pdfDownload btn btn-success"><i class="fa fa-download" aria-hidden="true"></i></a>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+</div>';
+        echo $output;
+
+    }
+
+    public function mlecs_show_record_data_review() {
+        $record_id = $this->input->post('record_id');
+        $this->db->select('*');
+        $this->db->from('tcf_record');
+        $this->db->join('tcf_list', 'tcf_record.tcf_list_id = tcf_list.tcf_list_id', 'inner');
+        $this->db->where('tcf_record.tcf_record_table_id', $record_id);
+        $query = $this->db->get();
+        $data = $query->result();
+        $output = '';
+        $output .=
+        '<div class="modal-header bordered">
+                            <img width="15%" src="' . base_url("assets/images/logo.png") . '" alt="" srcset="">
+                            <h5 style="text-align:center;" class="modal-title" id="exampleModalLabel">
+                            Master List of Equipment Calibration Schedule
+                            </h5>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered" style="font-size: 13px!important;">
+                            <thead style="font-size:0.7rem;text-align:center;">
+                                <tr>
+                                <th>DATE</th>
+                                <th>TIME (AM/PM)</th>
+                                <th>CHECKER INITIALS</th>
+                                <th>THERMOMETER ID</th>
+                                <th>NIST/MERCURY THERMOMETER</th>
+                                <th>THERMOMETER ACTUAL READING</th>
+                                <th>DIFFERENCE (RESULTS)</th>
+                                <th>COMMENTS /NOTES:</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+        if ($query->num_rows() > 0) {
+            foreach ($data as $key => $record) {
+                $output .= '
+        <tr>
+            <td>' .  $record->tcf_list_date . '</td>
+            <td>' . $record->tcf_list_time . '</td>
+            <td>' . $record->tcf_list_checker_initial . '</td>
+            <td>' . $record->tcf_list_ther_id . '</td>
+            <td>' . $record->tcf_list_nist_ther . '</td>
+            <td>' . $record->tcf_list_ther_act_read . '</td>
+            <td>' . $record->tcf_list_diff . '</td>
+            <td>' . $record->tcf_list_comment . '</td>
+        </tr>';
+            }
+        } else {
+            $output = '<tr><td colspan="8">Record not found</td></tr>';
+        }
+
+        $output .= '  
+    </tbody>
+    </table> 
+   
+</div>
+<div class="modal-footer border-top-0 d-flex justify-content-between">
+    <a id="' . $record_id . '" class="update_record btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 </div>';
         echo $output;
