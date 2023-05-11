@@ -67,6 +67,46 @@ class Forms extends CI_Controller
                 $this->content = 'tcf/tcf_form';
                 break;
             case 'list':
+                if(isset($_POST['update_record'])){
+                    try {
+                        if (isset($_FILES['reviewer_sign_img']['name'])) {
+                            $uploaddir = './uploads/fwcc/images/';
+                            $sign1   = basename($_FILES['reviewer_sign_img']['name']);
+                            $uploadfile = $uploaddir . $sign1;
+                            move_uploaded_file($_FILES['reviewer_sign_img']['tmp_name'], $uploadfile);
+                        } else {
+                            $sign1 = '';
+                        }
+                        if (isset($_FILES['approver_sign_img']['name'])) {
+                            $uploaddir = './uploads/fwcc/images/';
+                            $sign2   = basename($_FILES['approver_sign_img']['name']);
+                            $uploadfile = $uploaddir . $sign2;
+                            move_uploaded_file($_FILES['approver_sign_img']['tmp_name'], $uploadfile);
+                        } else {
+                            $sign2 = '';
+                        }
+                        $tcf_record_id = $this->input->post('record_id');
+                        $for_reviewer = array(
+                            'rev_name' => $this->input->post('reviewer_name'),
+                            'rev_sign' => $this->input->post('reviewer_sign'),
+                            'rev_sign_image' => $sign1,
+                            'rev_position' => $this->input->post('r_position'),
+                            'rev_date' => $this->input->post('reviewed_date'),
+                            'ver_name' => $this->input->post('approver_name'),
+                            'ver_sign' => $this->input->post('approver_sign'),
+                            'ver_sign_image' => $sign2,
+                            'ver_position' => $this->input->post('a_position'),
+                            'ver_date' => $this->input->post('approved_date')
+                        );
+                        
+                        $this->Quires->update_where_tcf($for_reviewer, $tcf_record_id, 'tcf_reviewer_sign');                        
+                        $this->session->set_flashdata('success_msg', 'Inserted Successfully!');
+                        redirect('forms/fwcc_tcf/list');
+                    } catch(\Exception $e) {
+                        log_message('error', $e->getMessage());
+                        redirect($this->agent->referrer());
+                    }
+                }
                 $this->content = 'tcf/tcf_list';
                 break;
             default:
@@ -286,10 +326,8 @@ public function mlecs_show_list_review()
     </table> 
    
 </div>
-<div class="modal-footer border-top-0 d-flex justify-content-between">
-    <a id="' . $record_id . '" class="update_record btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></a>
-    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-</div>';
+<input type="hidden" name="record_id" value="'.$record_id.'">
+';
         echo $output;
 
     }

@@ -38,6 +38,7 @@
                 </div>
                 <div class="modal fade" id="cartModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <form method="POST" enctype="multipart/form-data">
                         <div  class="modal-content">
                             <div id="mlecs_record_review">
                             </div>
@@ -130,8 +131,13 @@
                                 </td>
                             </tr>
                             </table>
+                            <div class="modal-footer border-top-0 d-flex justify-content-between">
+                            <button type="submit" name="update_record" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                         </div>
-                        
+                        </div>
+                     </form>
+                        <!-- end of modal content -->
                     </div>
                 </div>
     <center><img width="15%" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="" srcset="">

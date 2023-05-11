@@ -63,5 +63,13 @@ error_reporting(E_ALL);
 		$this->db->update('mlecs_list');
 		return ($this->db->affected_rows() > 0);
 	}
-
+	public function update_where_tcf($data, $id, $table_name) {
+		$this->db->where('tcf_record_table_id', $id);
+		$this->db->update($table_name, $data);
+		if($this->db->affected_rows() > 0){
+			$this->db->where('tcf_record_table_id', $id);
+			$this->db->set('review_status', 1);
+		    $this->db->update('tcf_record');
+		}
+	}
 	}
