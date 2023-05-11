@@ -19,6 +19,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
 
     <style>
+        table td {
+            white-space: nowrap;
+            border: 1px solid black;
+        }
+
         .signature-pad {
             border-radius: 2px;
             border: 1px dashed #ccc;

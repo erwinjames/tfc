@@ -58,9 +58,9 @@ error_reporting(E_ALL);
 
 	public function update_field($id, $field, $value)
 	{
-		$this->db->where('mlecs_list_id', $id);
+		$this->db->where('tcf_list_id ', $id);
 		$this->db->set($field, $value);
-		$this->db->update('mlecs_list');
+		$this->db->update('tcf_list');
 		return ($this->db->affected_rows() > 0);
 	}
 	public function update_where_tcf($data, $id, $table_name) {

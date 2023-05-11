@@ -98,7 +98,7 @@ class Forms extends CI_Controller
                             'ver_position' => $this->input->post('a_position'),
                             'ver_date' => $this->input->post('approved_date')
                         );
-                        
+                  
                         $this->Quires->update_where_tcf($for_reviewer, $tcf_record_id, 'tcf_reviewer_sign');                        
                         $this->session->set_flashdata('success_msg', 'Inserted Successfully!');
                         redirect('forms/fwcc_tcf/list');
@@ -139,14 +139,14 @@ public function mlecs_show(){
     foreach($data as $row){
         $output .= '
             <tr>
-            <td>' . $row->tcf_list_date . '</td>
+            <td> <a id="' . $row->tcf_list_id  . '" class="delete_list" style="font-size:12px;color:red;"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>&nbsp' . $row->tcf_list_date . '</td>
             <td>' . $row->tcf_list_time . '</td>
-            <td>' . $row->tcf_list_checker_initial . '</td>
-            <td>' . $row->tcf_list_ther_id . '</td>
-            <td>' . $row->tcf_list_nist_ther . '</td>
-            <td>' . $row->tcf_list_ther_act_read . '</td>
-            <td>' . $row->tcf_list_diff . '</td>
-            <td>' . $row->tcf_list_comment . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_checker_initial . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_id . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_nist_ther" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_nist_ther . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_act_read" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_act_read . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_diff" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_diff . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_comment" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_comment . '</td>
             </tr>
             <input type="hidden" name="list_id[]" value="'.$row->tcf_list_id.'">
         ';
@@ -169,7 +169,7 @@ public function mlecs_show_list()
             $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal">' . $row->tcf_list_id . '</a></td>
+                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal">' . $row->record_created . '</a></td>
                     <td style="text-align:center;"> 
                     <a style="font-size:20px;text-align:center" class="pdfPrint"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-print" aria-hidden="true"></i></a>
                     &nbsp
@@ -195,7 +195,7 @@ public function mlecs_show_list_review()
             $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal1">' . $row->tcf_list_id . '</a></td>
+                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
                     <td style="text-align:center;"> 
                     <a style="font-size:20px;text-align:center" class="select-record" data-toggle="modal" data-target="#cartModal1"  id="'.$row->tcf_record_table_id.'">
                     <i class="fa fa-eye" aria-hidden="true"></i>
@@ -217,35 +217,43 @@ public function mlecs_show_list_review()
         $query = $this->db->get();
         $data = $query->result();
         $output = '';
-        $output .=
-        '<div class="modal-header bordered" style="text-align:center">
-                            <img width="15%" src="' . base_url("assets/images/logo.png") . '" alt="" srcset="">
-                            <h5 style="text-align:center;" class="modal-title" id="exampleModalLabel">
-                            Master List of Equipment Calibration Schedule
+        $output .= ' <div class="modal-body">
+                            <table class="table table-bordered" style="font-size: 13px!important;">
+                            <thead>
+                            <tr>
+                             <th colspan="8" style="text-align:center;">
+                                    <img width="15%" src="' . base_url("assets/images/logo.png") . '" alt="" srcset="">
+                                    <h5 style="text-align:center;" class="modal-title" id="exampleModalLabel">
+                                    THERMOMETER CHECK FORM
                             </h5>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered table-image">
-                            <thead class="thead-dark">
+                            <br>
+                             </th>
+                            </tr>
+                            </thead>
+                            <thead style="font-size:0.7rem;text-align:center;">
                                 <tr>
-                                <th scope="col">Equipment ID</th>
-                                <th scope="col">Equipment Description</th>
-                                <th scope="col">Equipment Manufacturer</th>
-                                <th scope="col">Serial Number</th>
-                                <th scope="col">Calibration Period</th>
-                                <th scope="col">Last Calibration Date</th>
-                                <th scope="col">Calibration Due Date</th>
-                                <th scope="col">Calibrating Body/Organization</th>
+                                <th>DATE</th>
+                                <th>TIME (AM/PM)</th>
+                                <th>CHECKER INITIALS</th>
+                                <th>THERMOMETER ID</th>
+                                <th>NIST/MERCURY THERMOMETER</th>
+                                <th>THERMOMETER ACTUAL READING</th>
+                                <th>DIFFERENCE (RESULTS)</th>
+                                <th>COMMENTS /NOTES:</th>
                                 </tr>
                             </thead>
                             <tbody>';
 
         if ($query->num_rows() > 0) {
+            
             foreach ($data as $key => $record) {
+                $time_value = $record->tcf_list_time;
+                $time = DateTime::createFromFormat('H:i:s', $time_value);
+                $formatted_time = $time->format('g:i A');
                 $output .= '
         <tr>
             <td>' .  $record->tcf_list_date . '</td>
-            <td>' . $record->tcf_list_time . '</td>
+            <td>' . $formatted_time . '</td>
             <td>' . $record->tcf_list_checker_initial . '</td>
             <td>' . $record->tcf_list_ther_id . '</td>
             <td>' . $record->tcf_list_nist_ther . '</td>
@@ -262,7 +270,7 @@ public function mlecs_show_list_review()
     </tbody>
     </table> 
 </div>
-<div class="modal-footer border-top-0 d-flex justify-content-between">
+<div class="modal-footer border-top-0 d-flex">
     <a id="' . $record_id . '" class="pdfPrint btn btn-success"><i class="fa fa-print" aria-hidden="true"></i></a>
     <a id="' . $record_id . '" class="pdfDownload btn btn-success"><i class="fa fa-download" aria-hidden="true"></i></a>
     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -276,19 +284,24 @@ public function mlecs_show_list_review()
         $this->db->select('*');
         $this->db->from('tcf_record');
         $this->db->join('tcf_list', 'tcf_record.tcf_list_id = tcf_list.tcf_list_id', 'inner');
+        $this->db->join('tcf_reviewer_sign', 'tcf_record.tcf_record_table_id = tcf_reviewer_sign.tcf_record_table_id', 'inner');
         $this->db->where('tcf_record.tcf_record_table_id', $record_id);
         $query = $this->db->get();
         $data = $query->result();
         $output = '';
         $output .=
-        '<div class="modal-header bordered">
+        ' <div class="modal-body">
+                            <table class="table table-bordered" style="font-size: 13px!important;">
+                            <thead>
+                            <tr>
+                             <th colspan="8" style="text-align:center;">
                             <img width="15%" src="' . base_url("assets/images/logo.png") . '" alt="" srcset="">
                             <h5 style="text-align:center;" class="modal-title" id="exampleModalLabel">
-                            Master List of Equipment Calibration Schedule
+                            THERMOMETER CHECK FORM
+                            </th>
                             </h5>
-                        </div>
-                        <div class="modal-body">
-                            <table class="table table-bordered" style="font-size: 13px!important;">
+                            </tr>
+                            </thead>
                             <thead style="font-size:0.7rem;text-align:center;">
                                 <tr>
                                 <th>DATE</th>
@@ -305,16 +318,19 @@ public function mlecs_show_list_review()
 
         if ($query->num_rows() > 0) {
             foreach ($data as $key => $record) {
+                $time_value = $record->tcf_list_time;
+                $time = DateTime::createFromFormat('H:i:s', $time_value);
+                $formatted_time = $time->format('g:i A');
                 $output .= '
         <tr>
             <td>' .  $record->tcf_list_date . '</td>
-            <td>' . $record->tcf_list_time . '</td>
-            <td>' . $record->tcf_list_checker_initial . '</td>
-            <td>' . $record->tcf_list_ther_id . '</td>
-            <td>' . $record->tcf_list_nist_ther . '</td>
-            <td>' . $record->tcf_list_ther_act_read . '</td>
-            <td>' . $record->tcf_list_diff . '</td>
-            <td>' . $record->tcf_list_comment . '</td>
+            <td>' . $formatted_time . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_checker_initial . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_ther_id . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_nist_ther" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_nist_ther . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_act_read" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_ther_act_read . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_diff" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_diff . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_comment" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_comment . '</td>
         </tr>';
             }
         } else {
@@ -327,6 +343,7 @@ public function mlecs_show_list_review()
    
 </div>
 <input type="hidden" name="record_id" value="'.$record_id.'">
+
 ';
         echo $output;
 
@@ -337,17 +354,18 @@ public function mlecs_show_list_review()
         $this->load->library('pdf');
         $this->load->helper('file');
         $record_id = $this->input->post('id');
+        // $record_id = 2;
         $this->db->select('*');
-        $this->db->from('mlecs_record');
-        $this->db->join('mlecs_list', 'mlecs_record.mlecs_record_f_list_id = mlecs_list.mlecs_list_id', 'inner');
-        $this->db->join('mlecs_reviewer_sign', 'mlecs_record.table_id = mlecs_reviewer_sign.table_id', 'inner');
-        $this->db->where('mlecs_record.table_id', $record_id);
+        $this->db->from('tcf_record');
+        $this->db->join('tcf_list','tcf_record.tcf_list_id = tcf_list.tcf_list_id', 'inner');
+        $this->db->join('tcf_reviewer_sign', 'tcf_record.tcf_record_table_id = tcf_reviewer_sign.tcf_record_table_id', 'inner');
+        $this->db->where('tcf_record.tcf_record_table_id', $record_id);
         $query = $this->db->get();
         $data = $query->result();
         $logo_image = file_get_contents('assets/images/logo.png');
         $logo_data_uri = 'data:image/png;base64,' . base64_encode($logo_image);
         $html_content = '';
-        $html_content .='
+        $html_content .= '
         <style>
         div.layout-978 { width: 978px; margin: 0px auto; }
         table {
@@ -362,11 +380,9 @@ public function mlecs_show_list_review()
         .datagrid {
             border-collapse: collapse;
         }
-        
+     
         .datagrid thead tr th {
-            background: #8080801f;
             color: #fffff;
-            font-size: 11px;
             font-weight: normal;
             text-align: center;
             padding: 6px 8px;
@@ -378,6 +394,7 @@ public function mlecs_show_list_review()
         
         .datagrid tbody tr td {
             font-size: 10px;
+            white-space: nowrap;
             text-align:center;
             padding: 6px 8px;
             border: 1px solid #c9c9c9;
@@ -420,25 +437,24 @@ public function mlecs_show_list_review()
             text-align: right;
         }
         </style>
-        <table class="datagrid">
+        <table class="datagrid" >
         <thead>
             <tr>
             <th colspan="8">
             <img width="15%" src="'.$logo_data_uri. '">
-            <h5 style="font-size:15px;">Master List of Equipment Calibration Schedule </h5>    
+            <h5 style="font-size:15px;">THERMOMETER CHECK FORM</h5>    
             </th>
             </tr>
         </thead> 
-        <thead style="text-align:center;">
-            <tr style="text-align:center;">
-            <th scope="col">DATE</th>
-            <th scope="col">TIME (AM/PM)</th>
-            <th scope="col">CHECKER INITIALS</th>
-            <th scope="col">THERMOMETER ID</th>
-            <th scope="col">NIST/MERCURY THERMOMETER</th>
-            <th scope="col">THERMOMETER ACTUAL READING</th>
-            <th scope="col">DIFFERENCE (RESULTS)</th>
-            <th scope="col">COMMENTS /NOTES:</th>
+        <thead style="text-align:center;font-size:12px; background: #8a97a0; color: #FFF;">
+            <th>DATE</th>
+            <th>TIME (AM/PM)</th>
+            <th>CHECKER INITIALS</th>
+            <th>THERMOMETER ID</th>
+            <th>NIST/MERCURY THERMOMETER</th>
+            <th>THERMOMETER ACTUAL READING</th>
+            <th>DIFFERENCE (RESULTS)</th>
+            <th>COMMENTS /NOTES:</th>
             </tr>
         </thead>
         <tbody>';
@@ -461,7 +477,7 @@ public function mlecs_show_list_review()
                 </table>
                 <br>';
         
-        $imageData = $row->rev_sign;
+        $imageData = $row->per_sign;
         $imageData = str_replace('data:image/png;base64,', '', $imageData);
         $imageData = str_replace(' ', '+', $imageData);
         $imageBinary = base64_decode($imageData);
@@ -470,7 +486,7 @@ public function mlecs_show_list_review()
         $sign_image = file_get_contents(base_url('assets/sign1.png'));
         $sign_data_uri = 'data:image/png;base64,' . base64_encode($sign_image);
         // sign 2
-        $imageData2 = $row->appr_sign;
+        $imageData2 = $row->rev_sign;
         $imageData2 = str_replace('data:image/png;base64,', '', $imageData2);
         $imageData2 = str_replace(' ', '+', $imageData2);
         $imageBinary2 = base64_decode($imageData2);
@@ -478,38 +494,48 @@ public function mlecs_show_list_review()
         write_file($file_path2, $imageBinary2);
         $sign_image2 = file_get_contents(base_url('assets/sign2.png'));
         $sign_data_uri2 = 'data:image/png;base64,' . base64_encode($sign_image2);
-      
+        //sign 3
+        $imageData3 = $row->ver_sign;
+        $imageData3 = str_replace('data:image/png;base64,', '', $imageData3);
+        $imageData3 = str_replace(' ', '+', $imageData3);
+        $imageBinary3 = base64_decode($imageData3);
+        $file_path3 = FCPATH . 'assets/sign2.png';
+        write_file($file_path3, $imageBinary3);
+        $sign_image3 = file_get_contents(base_url('assets/sign2.png'));
+        $sign_data_uri3 = 'data:image/png;base64,' . base64_encode($sign_image3);
         // reviewed date
+        $per_date =  $row->per_date;
+        $per_formattedDate = date('M j, Y', strtotime($per_date));
+        // approval date
         $rev_date =  $row->rev_date;
         $rev_formattedDate = date('M j, Y', strtotime($rev_date));
-        // approval date
-        $appr_date =  $row->appr_date;
-        $appr_formattedDate = date('M j, Y', strtotime($appr_date));
-        // reviewed date
-        $rev_date =  $row->rev_date;
-        $rev_timestamp = strtotime($rev_date);
-        $rev_formattedDate = date('M j, Y', $rev_timestamp);
-        // approval date
-        $appr_date =  $row->appr_date;
-        $appr_timestamp = strtotime($appr_date);
-        $appr_formattedDate = date('M j, Y', $appr_timestamp);
+        // verifier date
+        $ver_date =  $row->ver_date;
+        $ver_formattedDate = date('M j, Y', strtotime($ver_date));
         $html_content .= '
                 <table class="signature-container-wrapper">
             <tr>
                 <td class="signature-container">
-               <h6>Reviewed By:<h6><br> <img width="40%" src="'.$sign_data_uri.'">
+               <h6>Performed By:<h6><br> <img width="40%" src="'.$sign_data_uri.'">
+                <hr>
+                <div class="name">' . $row->per_name . '</div>
+                <div class="position">' . $row->per_position . '</div>
+                <div class="date">' . $per_formattedDate . '</div>
+              
+                </td>
+                <td class="signature-container">
+                <h6>Reviewed By:<h6><br> <img width="40%" src="'.$sign_data_uri2.'">
                 <hr>
                 <div class="name">' . $row->rev_name . '</div>
                 <div class="position">' . $row->rev_position . '</div>
                 <div class="date">' . $rev_formattedDate . '</div>
-              
                 </td>
-                <td class="signature-container">
-                <h6>Approved By:<h6><br> <img width="40%" src="'.$sign_data_uri2.'">
+                  <td class="signature-container">
+                <h6>Verify By:<h6><br> <img width="40%" src="' . $sign_data_uri3 . '">
                 <hr>
-                <div class="name">' . $row->appr_name . '</div>
-                <div class="position">' . $row->appr_position . '</div>
-                <div class="date">' . $appr_formattedDate . '</div>
+                <div class="name">' . $row->ver_name . '</div>
+                <div class="position">' . $row->ver_position . '</div>
+                <div class="date">' . $ver_formattedDate . '</div>
                 </td>
             </tr>
             </table>
@@ -523,8 +549,8 @@ public function mlecs_show_list_review()
     public function delete_list()
     {
         $list_id = $this->input->post('list_id');
-        $this->db->where('mlecs_list_id', $list_id);
-        $this->db->delete('mlecs_list');
+        $this->db->where('tcf_list_id ', $list_id);
+        $this->db->delete('tcf_list');
         echo 'success';
     }
 
