@@ -357,25 +357,25 @@
                 }
             });
         });
-        $(document).on('click', '.select-record', function() {
-            var url = '<?php echo base_url(); ?>';
-            var record_id = $(this).attr('id');
-            console.log(record_id);
-            $.ajax({
-                type: 'POST',
-                url: url + 'forms/mlecs_show_record_data_review',
-                data: {
-                    record_id: record_id
-                },
-                success: function(response) {
-                    console.log(response);
-                    $('#mlecs_record_review').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
+        // $(document).on('click', '.select-record', function() {
+        //   
+        //     var record_id = $(this).attr('id');
+        //     console.log(record_id);
+        //     $.ajax({
+        //         type: 'POST',
+        //         url: url + 'forms/mlecs_show_record_data_review',
+        //         data: {
+        //             record_id: record_id
+        //         },
+        //         success: function(response) {
+        //             console.log(response);
+        //             $('#mlecs_record_review').html(response);
+        //         },
+        //         error: function(xhr, status, error) {
+        //             console.log(xhr.responseText);
+        //         }
+        //     });
+        // });
 
         $(document).on('click', '.pdfDownload', function(event) {
             event.preventDefault();
