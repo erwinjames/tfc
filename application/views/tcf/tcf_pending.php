@@ -169,23 +169,21 @@
     <center><img width="15%" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="" srcset="">
         <h4>Master List of Equipment Calibration Schedule Record</h4>
     </center>
-    <br>
-    <br>
     <div class="container">
-            <div class="tab-pane active" role="tabpanel" id="info">
-                <table id="table_record" class="table table table-bordered table-hover dt-responsive">
-                    <thead>
-                        <tr>
-                            <th>Record #</th>
-                            <th>Date Record</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mlecs_list">
-                    </tbody>
-                </table>
-            </div>
-    </div>
+        <table id="table_record_review" class="table table-bordered table-hover dt-responsive">
+            <thead>
+                <tr>
+                    <th>Record #</th>
+                    <th>Date Record</th>
+                    <th>Reviewer</th>
+                    <th>Verifier</th>
+                </tr>
+            </thead>
+            <tbody id="mlecs_list_review">
+
+            </tbody>
+        </table>
+</div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -200,25 +198,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.3/jSignature.min.js"></script>
 <script>
     $(document).ready(function() {
-        show_list();
         show_list_review();
-
-        function show_list() {
-            var url = '<?php echo base_url(); ?>';
-            $.ajax({
-                type: 'POST',
-                url: url + 'forms/mlecs_show_list',
-                success: function(response) {
-                    $('#mlecs_list').html(response);
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    console.log(xhr.responseText);
-                    console.log(textStatus);
-                    console.log(errorThrown);
-                }
-            });
-        }
-
 
         function show_list_review() {
             var url = '<?php echo base_url(); ?>';

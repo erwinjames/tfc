@@ -18,11 +18,19 @@ error_reporting(E_ALL);
 			$query = $this->db->get($table_name);
 			return $query->result(); 
 		}
-		public function show_where_tcf($table_name,$condition,$value){
-			$this->db->where($condition,$value);
-			$query = $this->db->get($table_name);
-			return $query->result(); 
-		}
+	public function show_where_tcf($table_name)
+	{
+		$this->db->select('*');
+		$this->db->from($table_name . ' as t1');
+		$this->db->join('tcf_reviewer_sign as t2', 't1.tcf_record_table_id = t2.tcf_record_table_id', 'left');
+		$this->db->where('t2.rev_sign', '');
+		$this->db->where('t2.ver_sign', '');
+		$query = $this->db->get();
+		return $query->result();
+	}
+
+
+
 		function insert_batch($table_name, $data)
 		{
 			$this->db->insert_batch($table_name, $data);

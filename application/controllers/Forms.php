@@ -67,7 +67,10 @@ class Forms extends CI_Controller
                 $this->content = 'tcf/tcf_form';
                 break;
             case 'list':
-                if(isset($_POST['update_record'])){
+                $this->content = 'tcf/tcf_list';
+                break;
+            case 'pending':
+                if (isset($_POST['update_record'])) {
                     try {
                         if (isset($_FILES['reviewer_sign_img']['name'])) {
                             $uploaddir = './uploads/fwcc/images/';
@@ -98,16 +101,16 @@ class Forms extends CI_Controller
                             'ver_position' => $this->input->post('a_position'),
                             'ver_date' => $this->input->post('approved_date')
                         );
-                  
-                        $this->Quires->update_where_tcf($for_reviewer, $tcf_record_id, 'tcf_reviewer_sign');                        
+
+                        $this->Quires->update_where_tcf($for_reviewer, $tcf_record_id, 'tcf_reviewer_sign');
                         $this->session->set_flashdata('success_msg', 'Inserted Successfully!');
-                        redirect('forms/fwcc_tcf/list');
-                    } catch(\Exception $e) {
+                        redirect('forms/fwcc_tcf/pending');
+                    } catch (\Exception $e) {
                         log_message('error', $e->getMessage());
                         redirect($this->agent->referrer());
                     }
                 }
-                $this->content = 'tcf/tcf_list';
+                $this->content = 'tcf/tcf_pending';
                 break;
             default:
                 redirect($this->agent->referrer());
@@ -157,7 +160,7 @@ public function mlecs_show(){
 
 public function mlecs_show_list()
 {
-    $data = $this->Quires->show_where_tcf('tcf_record','review_status',1);
+    $data = $this->Quires->show_where_tcf('tcf_record','review_status',0);
     $output = '';
     $table_ids = array(); // array to store the unique table_id values
     foreach ($data as $row) {
@@ -183,31 +186,76 @@ public function mlecs_show_list()
 }
 public function mlecs_show_list_review()
 {
-    $data = $this->Quires->show_where_tcf('tcf_record','review_status',0);
+    $data = $this->Quires->show_where_tcf('tcf_record');
     $output = '';
     $table_ids = array(); // array to store the unique table_id values
     foreach ($data as $row) {
-        // check if the current row's table_id is already in the array
-        if (!in_array($row->tcf_record_table_id, $table_ids)) {
-            // add the table_id to the array
-            $table_ids[] = $row->tcf_record_table_id;
-            // display the row
-            $output .= '
+    if($row->rev_sign=='') {
+                if (!in_array($row->tcf_record_table_id, $table_ids)) {
+                    $table_ids[] = $row->tcf_record_table_id;
+                    $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal1" href="'.base_url('forms/mlecs_show_record_data_review/'.$row->tcf_record_table_id.'').'">' . $row->record_created . '</a></td>
+                    <td><a  id="' . $row->tcf_record_table_id . '" class="record_reivew" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
                     <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center" class="select-record" data-toggle="modal" data-target="#cartModal1"  id="'.$row->tcf_record_table_id.'">
-                    <i class="fa fa-eye" aria-hidden="true"></i>
+                    <a style="font-size:20px;text-align:center" class="record_reivew" data-toggle="modal" data-target="#cartModal1"  id="' . $row->tcf_record_table_id . '">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    </td>
+                      <td style="text-align:center;"> 
+                    <a style="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"  id="' . $row->tcf_record_table_id . '">
+                    <i class="fa fa-check" aria-hidden="true"></i>
                     </a>
                     </td>
                 </tr>
             ';
+                }
+}else if($row->ver_sign == ''){
+                if (!in_array($row->tcf_record_table_id, $table_ids)) {
+                    $table_ids[] = $row->tcf_record_table_id;
+                    $output .= '
+                <tr>
+                    <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
+                    <td><a  id="' . $row->tcf_record_table_id . '" class="record_reivew" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
+                    <td style="text-align:center;"> 
+                    <a style="font-size:20px;text-align:center" class="record_reivew" data-toggle="modal" data-target="#cartModal1"  id="' . $row->tcf_record_table_id . '">
+                    <i class="fa fa-check" aria-hidden="true"></i>
+                    </a>
+                    </td>
+                      <td style="text-align:center;"> 
+                    <a style="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"  id="' . $row->tcf_record_table_id . '">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    </td>
+                </tr>
+            ';
+                }
+
+}else{
+    if (!in_array($row->tcf_record_table_id, $table_ids)) {
+        $table_ids[] = $row->tcf_record_table_id;
+        $output .= '
+                <tr>
+                    <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
+                    <td><a  id="'.$row->tcf_record_table_id. '" class="record_reivew" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
+                    <td style="text-align:center;"> 
+                    <a style="font-size:20px;text-align:center" class="record_reivew" data-toggle="modal" data-target="#cartModal1"  id="'.$row->tcf_record_table_id. '">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    </td>
+                      <td style="text-align:center;"> 
+                    <a style="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"  id="' . $row->tcf_record_table_id . '">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                    </a>
+                    </td>
+                </tr>
+            ';
+            }
+       
         }
     }
     echo $output;
 }
-    
     public function mlecs_show_record_data() {
         $record_id = $this->input->post('record_id');
         $this->db->select('*');
@@ -279,13 +327,73 @@ public function mlecs_show_list_review()
 
     }
 
-    public function mlecs_show_record_data_review($record_id) {
+    public function mlecs_show_record_data_review() {
+        $record_id = $this->input->post('record_id');
         $this->db->select('*');
         $this->db->from('tcf_record');
         $this->db->join('tcf_list', 'tcf_record.tcf_list_id = tcf_list.tcf_list_id', 'inner');
         $this->db->join('tcf_reviewer_sign', 'tcf_record.tcf_record_table_id = tcf_reviewer_sign.tcf_record_table_id', 'inner');
         $this->db->where('tcf_record.tcf_record_table_id', $record_id);
         $query = $this->db->get();
+        $data = $query->result();
+        $output = '';
+        $output .=
+        ' <div class="modal-body">
+                            <table class="table table-bordered" style="font-size: 13px!important;">
+                            <thead>
+                            <tr>
+                             <th colspan="8" style="text-align:center;">
+                            <img width="15%" src="' . base_url("assets/images/logo.png") . '" alt="" srcset="">
+                            <h5 style="text-align:center;" class="modal-title" id="exampleModalLabel">
+                            THERMOMETER CHECK FORM
+                            </th>
+                            </h5>
+                            </tr>
+                            </thead>
+                            <thead style="font-size:0.7rem;text-align:center;">
+                                <tr>
+                                <th>DATE</th>
+                                <th>TIME (AM/PM)</th>
+                                <th>CHECKER INITIALS</th>
+                                <th>THERMOMETER ID</th>
+                                <th>NIST/MERCURY THERMOMETER</th>
+                                <th>THERMOMETER ACTUAL READING</th>
+                                <th>DIFFERENCE (RESULTS)</th>
+                                <th>COMMENTS /NOTES:</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+
+        if ($query->num_rows() > 0) {
+            foreach ($data as $key => $record) {
+                $time_value = $record->tcf_list_time;
+                $time = DateTime::createFromFormat('H:i:s', $time_value);
+                $formatted_time = $time->format('g:i A');
+                $output .= '
+        <tr>
+            <td>' .  $record->tcf_list_date . '</td>
+            <td>' . $formatted_time . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_checker_initial . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_ther_id . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_nist_ther" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_nist_ther . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_act_read" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_ther_act_read . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_diff" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_diff . '</td>
+            <td class="editingtd" contenteditable="true" data-field="tcf_list_comment" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_comment . '</td>
+        </tr>';
+            }
+        } else {
+            $output = '<tr><td colspan="8">Record not found</td></tr>';
+        }
+
+        $output .= '  
+    </tbody>
+    </table> 
+   
+</div>
+<input type="hidden" name="record_id" value="'.$record_id.'">
+
+';
+        echo $output;
 
     }
 
