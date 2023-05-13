@@ -37,133 +37,7 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="cartModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <form method="POST" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div id="mlecs_record_review">
-                    </div>
-                    <table class="table table-bordered" style=" font-size: 13px!important;">
-                        <tr style="background:#E8E8E8">
-                            <td class="text-center fw-bold">Reviewed by</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">
-                                <div class="m-3 mb-5" style="display:flex; justify-content:center;">
-                                    <div>
-                                        <select id="main-sig-selection1" class="mb-1 p-1">
-                                            <option value="D1">Select Signature Option</option>
-                                            <option value="D1">Draw Signature</option>
-                                            <option value="U1">Upload Signature</option>
-                                        </select>
-                                        <div id="showD1" class="signature1" style="display:flex; justify-content:center">
-                                            <div class="signature-pad-container">
-                                                <div style="" class="signature-pad" id="signature-pad-1"></div><br>
-                                                <button type="button" class="border-1 bg-success text-light rsig-submitBtn" id="">Confirm Signature</button>
-                                                <button type="button" class="clear-btn1 border-1" id="">Clear</button>
-                                                <textarea type="text" class="signature-data-text1 d-none" name="reviewer_sign" value="" readonly></textarea>
-                                            </div>
-                                        </div><br>
-                                        <div id="showU1" class="signature1 d-none">
-                                            <input type="file" id="m-actual-image1" name="reviewer_sign_img" onchange="dataURLv(this,1)" style="margin-bottom:7px;" /><br>
-                                            <img id="m-actual-image-res1" width="220" height="80" src="#" /><br>
-                                            <button class="border-1 mt-1" type="button" id="reset-image-val1">Remove</button>
-                                        </div>
 
-                                        <div id="image-sig-r" class="d-none">
-                                            <div class="rimg-signature"></div><br>
-                                            <button class="border-1 mt-1" type="button" id="rclear-image">Remove</button>
-                                        </div><br>
-
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control mb-1" required name="reviewer_name" placeholder="Name">
-                                        </div>
-
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control mb-1" required name="r_position" placeholder="Position">
-                                        </div>
-
-                                        <div class="input-group input-group-sm">
-                                            <input type="datetime-local" class="form-control" required name="reviewed_date">
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="modal-footer border-top-0 d-flex justify-content-between">
-                        <button type="submit" name="update_record" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </form>
-            <!-- end of modal content -->
-        </div>
-    </div>
-
-    <!-- verifier modal -->
-    <div class="modal fade" id="cartModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <form method="POST" enctype="multipart/form-data">
-                <div class="modal-content">
-                    <div id="mlecs_record_review_verifier">
-                    </div>
-                    <table class="table table-bordered" style=" font-size: 13px!important;">
-                        <tr style="background:#E8E8E8">
-                            <td class="text-center fw-bold">Verified by</td>
-                        </tr>
-                        <tr>
-                            <td class="text-center">
-                                <div class="m-3 mb-5" style="display:flex; justify-content:center;">
-                                    <div>
-                                        <select id="main-sig-selection2" class="mb-1 p-1">
-                                            <option value="D2">Select Signature Option</option>
-                                            <option value="D2">Draw Signature</option>
-                                            <option value="U2">Upload Signature</option>
-                                        </select>
-                                        <div id="showD2" class="signature2" style="display:flex; justify-content:center">
-                                            <div class="signature-pad-container">
-                                                <div style="" class="signature-pad" id="signature-pad-2"></div><br>
-                                                <button type="button" class="border-1 bg-success text-light asig-submitBtn" id="">Confirm Signature</button>
-                                                <button type="button" class="clear-btn2 border-1" id="">Clear</button>
-                                                <textarea type="text" class="signature-data-text2 d-none" name="approver_sign" value="" readonly></textarea>
-                                            </div>
-                                        </div><br>
-                                        <div id="showU2" class="signature2 d-none">
-                                            <input type="file" id="m-actual-image2" name="approver_sign_img" onchange="dataURLv(this,2)" style="margin-bottom:7px;" /><br>
-                                            <img id="m-actual-image-res2" width="220" height="80" src="#" /><br>
-                                            <button class="border-1 mt-1" type="button" id="reset-image-val2">Remove</button>
-                                        </div>
-                                        <div id="image-sig-a" class="d-none">
-                                            <div class="aimg-signature"></div><br>
-                                            <button class="border-1 mt-1" type="button" id="aclear-image">Remove</button>
-                                        </div><br>
-
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control mb-1" required name="approver_name" placeholder="Name">
-                                        </div>
-
-                                        <div class="input-group input-group-sm">
-                                            <input type="text" class="form-control mb-1" required name="a_position" placeholder="Position">
-                                        </div>
-
-                                        <div class="input-group input-group-sm">
-                                            <input type="datetime-local" class="form-control" required name="approved_date">
-                                        </div>
-                                    </div>
-                                </div>
-                            </td>
-                        </tr>
-                    </table>
-                    <div class="modal-footer border-top-0 d-flex justify-content-between">
-                        <button type="submit" name="update_record" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </form>
-            <!-- end of modal content -->
-        </div>
-    </div>
     <!-- veriefier end modal -->
 
     <center><img width="15%" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="" srcset="">
@@ -172,19 +46,19 @@
     <br>
     <br>
     <div class="container">
-            <div class="tab-pane active" role="tabpanel" id="info">
-                <table id="table_record" class="table table table-bordered table-hover dt-responsive">
-                    <thead>
-                        <tr>
-                            <th>Record #</th>
-                            <th>Date Record</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="mlecs_list">
-                    </tbody>
-                </table>
-            </div>
+        <div class="tab-pane active" role="tabpanel" id="info">
+            <table id="table_record" class="table table table-bordered table-hover dt-responsive">
+                <thead>
+                    <tr>
+                        <th>Record #</th>
+                        <th>Date Record</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="mlecs_list">
+                </tbody>
+            </table>
+        </div>
     </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -200,14 +74,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.3/jSignature.min.js"></script>
 <script>
     $(document).ready(function() {
-        show_list();
+        tcf_show_list();
         show_list_review();
 
-        function show_list() {
+        function tcf_show_list() {
             var url = '<?php echo base_url(); ?>';
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_list',
+                url: url + 'forms/tcf_show_list',
                 success: function(response) {
                     $('#mlecs_list').html(response);
                 },
@@ -224,7 +98,7 @@
             var url = '<?php echo base_url(); ?>';
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_list_review',
+                url: url + 'forms/tcf_show_list_review',
                 success: function(response) {
                     $('#mlecs_list_review').html(response);
                 },
@@ -241,7 +115,7 @@
             console.log(record_id);
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_record_data',
+                url: url + 'forms/tcf_show_record_data',
                 data: {
                     record_id: record_id
                 },
@@ -254,51 +128,13 @@
                 }
             });
         });
-        $(document).on('click', '.record_reivew', function() {
-            var url = '<?php echo base_url(); ?>';
-            var record_id = $(this).attr('id');
-            console.log(record_id);
-            $.ajax({
-                type: 'POST',
-                url: url + 'forms/mlecs_show_record_data_review',
-                data: {
-                    record_id: record_id
-                },
-                success: function(response) {
-                    console.log(response);
-                    $('#mlecs_record_review').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
-        $(document).on('click', '.record_reivew_verifier', function() {
-            var url = '<?php echo base_url(); ?>';
-            var record_id = $(this).attr('id');
-            console.log(record_id);
-            $.ajax({
-                type: 'POST',
-                url: url + 'forms/mlecs_show_record_data_review',
-                data: {
-                    record_id: record_id
-                },
-                success: function(response) {
-                    console.log(response);
-                    $('#mlecs_record_review_verifier').html(response);
-                },
-                error: function(xhr, status, error) {
-                    console.log(xhr.responseText);
-                }
-            });
-        });
         $(document).on('click', '.pdfDownload', function(event) {
             event.preventDefault();
             var url = '<?php echo base_url(); ?>';
             var p_id = $(this).attr('id');
             // Make an AJAX request to the PDF generation endpoint
             $.ajax({
-                url: url + 'forms/pdf',
+                url: url + 'forms/tcf_pdf',
                 method: 'POST',
                 data: {
                     id: p_id
@@ -334,7 +170,7 @@
 
             // Make an AJAX request to the PDF generation endpoint
             $.ajax({
-                url: url + 'forms/pdf',
+                url: url + 'forms/tcf_pdf',
                 method: 'POST',
                 data: {
                     id: p_id

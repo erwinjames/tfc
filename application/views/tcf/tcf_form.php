@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="modal fade" id="largeModal" tabindex="-1" role="dialog" aria-labelledby="basicModal" aria-hidden="true">
             <div class="modal-dialog modal-m">
                 <div class="modal-content">
-                    <form id="mlecs_add_list_form">
+                    <form id="tcf_add_list_form">
                         <div class="modal-header">
                             <h4 class="modal-title" id="myModalLabel">Add List</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -124,7 +124,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </th>
                         </tr>
                     </thead>
-                    <tbody id="mlecs_form_data_list" style="font-size:12px;">
+                    <tbody id="tcf_form_data_list" style="font-size:12px;">
 
                     </tbody>
                 </table>
@@ -193,15 +193,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <script>
         $(document).ready(function() {
             var url = '<?php echo base_url(); ?>';
-            mlecs_table();
+            tcf_show();
 
-            function mlecs_table() {
+            function tcf_show() {
                 var url = '<?php echo base_url(); ?>';
                 $.ajax({
                     type: 'POST',
-                    url: url + 'forms/mlecs_show',
+                    url: url + 'forms/tcf_show',
                     success: function(response) {
-                        $('#mlecs_form_data_list').html(response);
+                        $('#tcf_form_data_list').html(response);
                     },
                     error: function(xhr, textStatus, errorThrown) {
                         console.log(xhr.responseText);
@@ -210,7 +210,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     }
                 });
             }
-            $(document).on('click', '.delete_list', function() {
+            $(document).on('click', '.tcf_delete_list', function() {
                 var list_id = $(this).attr('id');
                 Swal.fire({
                     title: 'Are you sure you want to delete this record?',
@@ -221,7 +221,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $.post(url + 'forms/delete_list', {
+                        $.post(url + 'forms/tc_delete_list', {
                             list_id: list_id
                         }, function(response) {
                             if (response == 'success') {
@@ -233,7 +233,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     showConfirmButton: false,
                                     timer: 1000
                                 });
-                                mlecs_table();
+                                tcf_show();
                             } else {
                                 alert('An error occurred while deleting the record.');
                             }
@@ -242,12 +242,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 })
             });
 
-            $(document).on('blur', '.editingtd', function() {
+            $(document).on('blur', '.tcf_editingtd', function() {
                 var field = $(this).data('field');
                 var id = $(this).data('id');
                 var value = $(this).text();
                 $.ajax({
-                    url: url + 'forms/edit_td',
+                    url: url + 'forms/tcf_edit_td',
                     method: 'POST',
                     data: {
                         field: field,
@@ -261,7 +261,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 });
             });
 
-            $("#mlecs_add_list_form").submit(function(event) {
+            $("#tcf_add_list_form").submit(function(event) {
                 event.preventDefault(); // prevent form submission
                 var tcf_date = $("#tcf_date").val();
                 var tcf_time = $("#tcf_time").val();
@@ -273,7 +273,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 var tcf_cn = $("#tcf_cn").val();
 
                 $.ajax({
-                    url: url + 'forms/mlecs_insert_form',
+                    url: url + 'forms/tcf_insert_form',
                     type: "POST",
                     data: {
                         tcf_date: tcf_date,
@@ -295,7 +295,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             showConfirmButton: false,
                             timer: 1000
                         });
-                        $("#mlecs_add_list_form")[0].reset(); //reset the form
+                        $("#tcf_add_list_form")[0].reset(); //reset the form
                         $("#largeModal").modal("hide"); //hide the modal
                         location.reload();
                     },

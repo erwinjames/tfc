@@ -31,7 +31,7 @@
 <body>
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div id="mlecs_record" class="modal-content">
+            <div id="tlc_data_show" class="modal-content">
 
 
             </div>
@@ -41,7 +41,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <form method="POST" enctype="multipart/form-data">
                 <div class="modal-content">
-                    <div id="mlecs_record_review">
+                    <div id="tcf_record_review">
                     </div>
                     <table class="table table-bordered" style=" font-size: 13px!important;">
                         <tr style="background:#E8E8E8">
@@ -106,7 +106,7 @@
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
             <form method="POST" enctype="multipart/form-data">
                 <div class="modal-content">
-                    <div id="mlecs_record_review_verifier">
+                    <div id="tcf_record_review_verifier">
                     </div>
                     <table class="table table-bordered" style=" font-size: 13px!important;">
                         <tr style="background:#E8E8E8">
@@ -156,7 +156,7 @@
                         </tr>
                     </table>
                     <div class="modal-footer border-top-0 d-flex justify-content-between">
-                        <button type="submit" name="update_record" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                        <button type="submit" name="update_reveiwer" class="btn btn-success"><i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
@@ -169,21 +169,22 @@
     <center><img width="15%" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="" srcset="">
         <h4>Master List of Equipment Calibration Schedule Record</h4>
     </center>
+    <br>
     <div class="container">
         <table id="table_record_review" class="table table-bordered table-hover dt-responsive">
             <thead>
                 <tr>
                     <th>Record #</th>
                     <th>Date Record</th>
-                    <th>Reviewer</th>
-                    <th>Verifier</th>
+                    <th>Review</th>
+                    <th>Verify</th>
                 </tr>
             </thead>
-            <tbody id="mlecs_list_review">
+            <tbody id="tcf_list_review">
 
             </tbody>
         </table>
-</div>
+    </div>
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -204,9 +205,9 @@
             var url = '<?php echo base_url(); ?>';
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_list_review',
+                url: url + 'forms/tcf_show_list_review',
                 success: function(response) {
-                    $('#mlecs_list_review').html(response);
+                    $('#tcf_list_review').html(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     console.log(xhr.responseText);
@@ -215,19 +216,19 @@
                 }
             });
         }
-        $(document).on('click', '.select-record', function() {
+        $(document).on('click', '.record_show_data', function() {
             var url = '<?php echo base_url(); ?>';
             var record_id = $(this).attr('id');
             console.log(record_id);
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_record_data',
+                url: url + 'forms/tcf_show_record_data_review',
                 data: {
                     record_id: record_id
                 },
                 success: function(response) {
                     console.log(response);
-                    $('#mlecs_record').html(response);
+                    $('#tlc_data_show').html(response);
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
@@ -240,13 +241,13 @@
             console.log(record_id);
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_record_data_review',
+                url: url + 'forms/tcf_show_record_data_review',
                 data: {
                     record_id: record_id
                 },
                 success: function(response) {
                     console.log(response);
-                    $('#mlecs_record_review').html(response);
+                    $('#tcf_record_review').html(response);
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
@@ -259,13 +260,13 @@
             console.log(record_id);
             $.ajax({
                 type: 'POST',
-                url: url + 'forms/mlecs_show_record_data_review',
+                url: url + 'forms/tcf_show_record_data_review',
                 data: {
                     record_id: record_id
                 },
                 success: function(response) {
                     console.log(response);
-                    $('#mlecs_record_review_verifier').html(response);
+                    $('#tcf_record_review_verifier').html(response);
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
@@ -278,7 +279,7 @@
             var p_id = $(this).attr('id');
             // Make an AJAX request to the PDF generation endpoint
             $.ajax({
-                url: url + 'forms/pdf',
+                url: url + 'forms/tcf_pdf',
                 method: 'POST',
                 data: {
                     id: p_id
@@ -314,7 +315,7 @@
 
             // Make an AJAX request to the PDF generation endpoint
             $.ajax({
-                url: url + 'forms/pdf',
+                url: url + 'forms/tcf_pdf',
                 method: 'POST',
                 data: {
                     id: p_id

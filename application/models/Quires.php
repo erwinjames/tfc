@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 			$query = $this->db->get($table_name);
 			return $query->result(); 
 		}
-		public function show_where($table_name){
+		public function tcf_show_where($table_name){
 			$this->db->where('tcf_flag_stat',0);
 			$query = $this->db->get($table_name);
 			return $query->result(); 
@@ -23,19 +23,15 @@ error_reporting(E_ALL);
 		$this->db->select('*');
 		$this->db->from($table_name . ' as t1');
 		$this->db->join('tcf_reviewer_sign as t2', 't1.tcf_record_table_id = t2.tcf_record_table_id', 'left');
-		$this->db->where('t2.rev_sign', '');
-		$this->db->where('t2.ver_sign', '');
 		$query = $this->db->get();
 		return $query->result();
 	}
 
-
-
-		function insert_batch($table_name, $data)
+		function tcf_insert_batch($table_name, $data)
 		{
 			$this->db->insert_batch($table_name, $data);
 		}
-	function insert_mlecs_record($records,$reviewer)
+	function insert_tcf_record($records,$reviewer)
 	{
 		$table_id = 1;
 		$this->db->select('tcf_record_table_id');
@@ -64,7 +60,7 @@ error_reporting(E_ALL);
 
 	}
 
-	public function update_field($id, $field, $value)
+	public function tcf_update_field($id, $field, $value)
 	{
 		$this->db->where('tcf_list_id ', $id);
 		$this->db->set($field, $value);

@@ -56,7 +56,7 @@ class Forms extends CI_Controller
                             'per_date' => $this->input->post('perform_date')
                         );
                         
-                        $this->Quires->insert_mlecs_record($insert_record,$for_reviewer);
+                        $this->Quires->insert_tcf_record($insert_record,$for_reviewer);
                         $this->session->set_flashdata('success_msg', 'Inserted Successfully!');
                         redirect('forms/fwcc_tcf/tcf');
                     } catch(\Exception $e) {
@@ -80,6 +80,26 @@ class Forms extends CI_Controller
                         } else {
                             $sign1 = '';
                         }
+                        $tcf_record_id = $this->input->post('record_id');
+                        $for_reviewer = array(
+                            'rev_name' => $this->input->post('reviewer_name'),
+                            'rev_sign' => $this->input->post('reviewer_sign'),
+                            'rev_sign_image' => $sign1,
+                            'rev_position' => $this->input->post('r_position'),
+                            'rev_date' => $this->input->post('reviewed_date'),
+                            'ver_name' => $this->input->post('approver_name')
+                        );
+
+                        $this->Quires->update_where_tcf($for_reviewer, $tcf_record_id, 'tcf_reviewer_sign');
+                        $this->session->set_flashdata('success_msg', 'Inserted Successfully!');
+                        redirect('forms/fwcc_tcf/pending');
+                    } catch (\Exception $e) {
+                        log_message('error', $e->getMessage());
+                        redirect($this->agent->referrer());
+                    }
+                }
+                if (isset($_POST['update_reveiwer'])) {
+                    try {
                         if (isset($_FILES['approver_sign_img']['name'])) {
                             $uploaddir = './uploads/fwcc/images/';
                             $sign2   = basename($_FILES['approver_sign_img']['name']);
@@ -90,11 +110,6 @@ class Forms extends CI_Controller
                         }
                         $tcf_record_id = $this->input->post('record_id');
                         $for_reviewer = array(
-                            'rev_name' => $this->input->post('reviewer_name'),
-                            'rev_sign' => $this->input->post('reviewer_sign'),
-                            'rev_sign_image' => $sign1,
-                            'rev_position' => $this->input->post('r_position'),
-                            'rev_date' => $this->input->post('reviewed_date'),
                             'ver_name' => $this->input->post('approver_name'),
                             'ver_sign' => $this->input->post('approver_sign'),
                             'ver_sign_image' => $sign2,
@@ -119,7 +134,7 @@ class Forms extends CI_Controller
         $this->load->view($this->content);
     }
 
-    public function mlecs_insert_form()
+    public function tcf_insert_form()
 {
     $data = array(
             'tcf_list_date' => $this->input->post('tcf_date'),
@@ -131,25 +146,25 @@ class Forms extends CI_Controller
             'tcf_list_diff' => $this->input->post('tcf_dr'),
             'tcf_list_comment' => $this->input->post('tcf_cn')
     );
-    $this->Quires->insert_batch('tcf_list', array($data));
+    $this->Quires->tcf_insert_batch('tcf_list', array($data));
     echo "Equipment added successfully";
 }
 
-public function mlecs_show(){
-    $data = $this->Quires->show_where('tcf_list');
+public function tcf_show(){
+    $data = $this->Quires->tcf_show_where('tcf_list');
 
     $output='';
     foreach($data as $row){
         $output .= '
             <tr>
-            <td> <a id="' . $row->tcf_list_id  . '" class="delete_list" style="font-size:12px;color:red;"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>&nbsp' . $row->tcf_list_date . '</td>
+            <td> <a id="' . $row->tcf_list_id  . '" class="tcf_delete_list" style="font-size:12px;color:red;"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>&nbsp' . $row->tcf_list_date . '</td>
             <td>' . $row->tcf_list_time . '</td>
-            <td class="editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_checker_initial . '</td>
-            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_id . '</td>
-            <td class="editingtd" contenteditable="true" data-field="tcf_list_nist_ther" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_nist_ther . '</td>
-            <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_act_read" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_act_read . '</td>
-            <td class="editingtd" contenteditable="true" data-field="tcf_list_diff" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_diff . '</td>
-            <td class="editingtd" contenteditable="true" data-field="tcf_list_comment" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_comment . '</td>
+            <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_checker_initial . '</td>
+            <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_id . '</td>
+            <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_nist_ther" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_nist_ther . '</td>
+            <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_ther_act_read" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_act_read . '</td>
+            <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_diff" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_diff . '</td>
+            <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_comment" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_comment . '</td>
             </tr>
             <input type="hidden" name="list_id[]" value="'.$row->tcf_list_id.'">
         ';
@@ -158,67 +173,65 @@ public function mlecs_show(){
     echo $output;
 }
 
-public function mlecs_show_list()
+public function tcf_show_list()
 {
-    $data = $this->Quires->show_where_tcf('tcf_record','review_status',0);
+    $data = $this->Quires->show_where_tcf('tcf_record');
     $output = '';
-    $table_ids = array(); // array to store the unique table_id values
-    foreach ($data as $row) {
-        // check if the current row's table_id is already in the array
-        if (!in_array($row->tcf_record_table_id, $table_ids)) {
-            // add the table_id to the array
-            $table_ids[] = $row->tcf_record_table_id;
-            // display the row
-            $output .= '
-                <tr>
-                    <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal">' . $row->record_created . '</a></td>
-                    <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center" class="pdfPrint"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-print" aria-hidden="true"></i></a>
-                    &nbsp
-                    <a style="font-size:20px;text-align:center" class="pdfDownload"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-download" aria-hidden="true"></i></a>
-                    </td>
-                </tr>
-            ';
+    $table_ids = array();
+        foreach ($data as $row) {
+            if($row->rev_sign != '' && $row->ver_sign !='') {
+                if (!in_array($row->tcf_record_table_id, $table_ids)) {
+                    $table_ids[] = $row->tcf_record_table_id;
+                    $output .= '
+                        <tr>
+                            <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
+                            <td><a  id="'.$row->tcf_record_table_id.'" class="select-record" data-toggle="modal" data-target="#cartModal">' . $row->record_created . '</a></td>
+                            <td style="text-align:center;"> 
+                            <a style="font-size:20px;text-align:center" class="pdfPrint"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-print" aria-hidden="true"></i></a>
+                            &nbsp
+                            <a style="font-size:20px;text-align:center" class="pdfDownload"  id="'.$row->tcf_record_table_id.'"><i class="fa fa-download" aria-hidden="true"></i></a>
+                            </td>
+                        </tr>
+                    ';
+                }
+            }
         }
-    }
     echo $output;
 }
-public function mlecs_show_list_review()
+public function tcf_show_list_review()
 {
     $data = $this->Quires->show_where_tcf('tcf_record');
     $output = '';
     $table_ids = array(); // array to store the unique table_id values
     foreach ($data as $row) {
+  if (!in_array($row->tcf_record_table_id, $table_ids)) {
+     $table_ids[] = $row->tcf_record_table_id;
     if($row->rev_sign=='') {
-                if (!in_array($row->tcf_record_table_id, $table_ids)) {
-                    $table_ids[] = $row->tcf_record_table_id;
+            
                     $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="' . $row->tcf_record_table_id . '" class="record_reivew" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
+                    <td><a  id="' . $row->tcf_record_table_id . '" >' . $row->record_created . '</a></td>
                     <td style="text-align:center;"> 
                     <a style="font-size:20px;text-align:center" class="record_reivew" data-toggle="modal" data-target="#cartModal1"  id="' . $row->tcf_record_table_id . '">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                     </td>
                       <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"  id="' . $row->tcf_record_table_id . '">
+                    <a style="font-size:20px;text-align:center"   id="' . $row->tcf_record_table_id . '">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     </a>
                     </td>
                 </tr>
             ';
-                }
 }else if($row->ver_sign == ''){
-                if (!in_array($row->tcf_record_table_id, $table_ids)) {
-                    $table_ids[] = $row->tcf_record_table_id;
+             
                     $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="' . $row->tcf_record_table_id . '" class="record_reivew" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
-                    <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center" class="record_reivew" data-toggle="modal" data-target="#cartModal1"  id="' . $row->tcf_record_table_id . '">
+                    <td><a  id="' . $row->tcf_record_table_id . '" >' . $row->record_created . '</a></td>
+                    <td style="text-align:center;" disabled> 
+                    <a disabled style="font-size:20px;text-align:center">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     </a>
                     </td>
@@ -229,22 +242,20 @@ public function mlecs_show_list_review()
                     </td>
                 </tr>
             ';
-                }
+                
 
-}else{
-    if (!in_array($row->tcf_record_table_id, $table_ids)) {
-        $table_ids[] = $row->tcf_record_table_id;
+}else if($row->ver_sign == '' && $row->rev_sign == ''){
         $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
-                    <td><a  id="'.$row->tcf_record_table_id. '" class="record_reivew" data-toggle="modal" data-target="#cartModal1">' . $row->record_created . '</a></td>
+                    <td><a  id="'.$row->tcf_record_table_id. '" >' . $row->record_created . '</a></td>
                     <td style="text-align:center;"> 
                     <a style="font-size:20px;text-align:center" class="record_reivew" data-toggle="modal" data-target="#cartModal1"  id="'.$row->tcf_record_table_id. '">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                     </td>
                       <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"  id="' . $row->tcf_record_table_id . '">
+                    <a disabledstyle="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"  id="' . $row->tcf_record_table_id . '">
                     <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                     </td>
@@ -256,7 +267,7 @@ public function mlecs_show_list_review()
     }
     echo $output;
 }
-    public function mlecs_show_record_data() {
+    public function tcf_show_record_data() {
         $record_id = $this->input->post('record_id');
         $this->db->select('*');
         $this->db->from('tcf_record');
@@ -327,7 +338,7 @@ public function mlecs_show_list_review()
 
     }
 
-    public function mlecs_show_record_data_review() {
+    public function tcf_show_record_data_review() {
         $record_id = $this->input->post('record_id');
         $this->db->select('*');
         $this->db->from('tcf_record');
@@ -369,6 +380,32 @@ public function mlecs_show_list_review()
                 $time_value = $record->tcf_list_time;
                 $time = DateTime::createFromFormat('H:i:s', $time_value);
                 $formatted_time = $time->format('g:i A');
+                // for reviewer
+
+                if($record->per_date==''){
+                    $per_formattedDate = '';
+                }else{
+                    $per_date =  $record->per_date;
+                    $per_timestamp = strtotime($per_date);
+                    $per_formattedDate = date('M j, Y', $per_timestamp);
+                }
+                // approval date
+                if ($record->rev_date == '') {
+                    $rev_formattedDate = '';
+                } else {
+                    $rev_date =  $record->rev_date;
+                    $rev_timestamp = strtotime($rev_date);
+                    $rev_formattedDate = date('M j, Y', $rev_timestamp);
+                }
+                // approval date
+                if ($record->ver_date == '') {
+                    $ver_formattedDate = '';
+                } else {
+                    $ver_date =  $record->ver_date;
+                    $ver_timestamp = strtotime($ver_date);
+                    $ver_formattedDate = date('M j, Y', $ver_timestamp);
+                }
+
                 $output .= '
         <tr>
             <td>' .  $record->tcf_list_date . '</td>
@@ -390,14 +427,57 @@ public function mlecs_show_list_review()
     </table> 
    
 </div>
-<input type="hidden" name="record_id" value="'.$record_id.'">
-
+<input type="hidden" name="record_id" value="'.$record_id. '">
+<div class="container">
+  <table class="table table-bordered" style=" font-size: 13px!important;">
+                        <tr>
+                            <td class="text-center fw-bold">Performered by</td>
+                            <td class="text-center fw-bold">Reviewed by</td>
+                            <td class="text-center fw-bold">Approved by</td>
+                        </tr>
+                        <tr>
+                            <td class="text-center" style="width: 270px;">
+                                <div class="m-3 mb-5" style="display:flex; justify-content:center;">
+                                    <div>
+                                        <img  width="80%" src="'. $record->per_sign. '">
+                                           <hr>
+                                        <div class="name">' . $record->per_name . '</div>
+                                        <div class="position">' . $record->per_position . '</div>
+                                         <div class="date">' . $per_formattedDate . '</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center" style="width: 270px;">
+                                <div class="m-3 mb-5" style="display:flex; justify-content:center;">
+                                    <div>
+                                       <img width="80%" src="' . $record->rev_sign . '">
+                                           <hr>
+                                        <div class="name">' . $record->rev_name . '</div>
+                                        <div class="position">' . $record->rev_position . '</div>
+                                          <div class="date">' . $rev_formattedDate . '</div>
+                                    </div>
+                                </div>
+                            </td>
+                              <td class="text-center" style="width: 270px;">
+                                <div class="m-3 mb-5"  style="display:flex; justify-content:center;">
+                                    <div>
+                                       <img  width="80%" src="' . $record->ver_sign . '">
+                                           <hr>
+                                        <div class="name">' . $record->ver_name . '</div>
+                                        <div class="position">' . $record->ver_position . '</div>
+                                           <div class="date">' . $ver_formattedDate . '</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                    </div>
 ';
         echo $output;
 
     }
 
-    public function pdf()
+    public function tcf_pdf()
     {
         $this->load->library('pdf');
         $this->load->helper('file');
@@ -594,7 +674,7 @@ public function mlecs_show_list_review()
             $this->pdf->stream("pdf_with_image.pdf", array("Attachment" => false));
         }
 
-    public function delete_list()
+    public function tc_delete_list()
     {
         $list_id = $this->input->post('list_id');
         $this->db->where('tcf_list_id ', $list_id);
@@ -602,12 +682,12 @@ public function mlecs_show_list_review()
         echo 'success';
     }
 
-    public function edit_td()
+    public function tcf_edit_td()
     {
         $field = $this->input->post('field');
         $id = $this->input->post('id');
         $value = $this->input->post('value');
-        $this->Quires->update_field($id, $field, $value);
+        $this->Quires->tcf_update_field($id, $field, $value);
         echo 'success';
     }
 
