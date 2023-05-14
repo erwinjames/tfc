@@ -337,7 +337,6 @@ public function tcf_show_list_review()
         echo $output;
 
     }
-
     public function tcf_show_record_data_review() {
         $record_id = $this->input->post('record_id');
         $this->db->select('*');

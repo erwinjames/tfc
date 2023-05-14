@@ -9,10 +9,7 @@ error_reporting(E_ALL);
 			$this->load->database();
 		}
 
-		public function show($table_name){
-			$query = $this->db->get($table_name);
-			return $query->result(); 
-		}
+	
 		public function tcf_show_where($table_name){
 			$this->db->where('tcf_flag_stat',0);
 			$query = $this->db->get($table_name);

@@ -31,7 +31,7 @@
 <body>
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
-            <div id="mlecs_record" class="modal-content">
+            <div id="tcf_record" class="modal-content">
 
 
             </div>
@@ -55,7 +55,7 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody id="mlecs_list">
+                <tbody id="tcf_list">
                 </tbody>
             </table>
         </div>
@@ -83,7 +83,7 @@
                 type: 'POST',
                 url: url + 'forms/tcf_show_list',
                 success: function(response) {
-                    $('#mlecs_list').html(response);
+                    $('#tcf_list').html(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     console.log(xhr.responseText);
@@ -100,7 +100,7 @@
                 type: 'POST',
                 url: url + 'forms/tcf_show_list_review',
                 success: function(response) {
-                    $('#mlecs_list_review').html(response);
+                    $('#tcf_list_review').html(response);
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     console.log(xhr.responseText);
@@ -121,7 +121,7 @@
                 },
                 success: function(response) {
                     console.log(response);
-                    $('#mlecs_record').html(response);
+                    $('#tcf_record').html(response);
                 },
                 error: function(xhr, status, error) {
                     console.log(xhr.responseText);
