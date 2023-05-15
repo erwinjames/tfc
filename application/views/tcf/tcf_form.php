@@ -307,6 +307,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 });
             });
 
+        
+        });
+    </script>
+    <script>
             for (let id = 0; id < 4; id++) {
                 $('#main-sig-selection' + id).on('change', function() {
                     var demovalue = $(this).val();
@@ -392,7 +396,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     reader.readAsDataURL(input.files[0]);
                 }
             }
-        });
     </script>
 </body>
 

@@ -24,7 +24,7 @@ class Forms extends CI_Controller
             case 'tcf':
                 if(isset($_POST['save_record'])){
                     try {
-                        if (isset($_FILES['reviewer_sign_img']['name'])) {
+                        if (isset($_FILES['performer_sign_img']['name'])) {
                             $uploaddir = './uploads/fwcc/images/';
                             $sign1   = basename($_FILES['performer_sign_img']['name']);
                             $uploadfile = $uploaddir . $sign1;
