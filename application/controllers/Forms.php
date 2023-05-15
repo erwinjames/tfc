@@ -127,6 +127,7 @@ class Forms extends CI_Controller
                 }
                 $this->content = 'tcf/tcf_pending';
                 break;
+                
             default:
                 redirect($this->agent->referrer());
                 break;
@@ -206,7 +207,7 @@ public function tcf_show_list_review()
     foreach ($data as $row) {
   if (!in_array($row->tcf_record_table_id, $table_ids)) {
      $table_ids[] = $row->tcf_record_table_id;
-    if($row->rev_sign=='') {
+    if($row->rev_sign=='' && $row->ver_sign == '') {
             
                     $output .= '
                 <tr>
@@ -218,13 +219,13 @@ public function tcf_show_list_review()
                     </a>
                     </td>
                       <td style="text-align:center;"> 
-                    <a style="font-size:20px;text-align:center"   id="' . $row->tcf_record_table_id . '">
-                    <i class="fa fa-check" aria-hidden="true"></i>
+                    <a style="font-size:20px;text-align:center" class="record_reivew_verifier" data-toggle="modal" data-target="#cartModal2"   id="' . $row->tcf_record_table_id . '">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>
                     </a>
                     </td>
                 </tr>
             ';
-}else if($row->ver_sign == ''){
+}else if($row->rev_sign !='' && $row->ver_sign == ''){
              
                     $output .= '
                 <tr>
@@ -244,7 +245,7 @@ public function tcf_show_list_review()
             ';
                 
 
-}else if($row->ver_sign == '' && $row->rev_sign == ''){
+}else if($row->ver_sign == '' && $row->rev_sign != ''){
         $output .= '
                 <tr>
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
