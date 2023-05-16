@@ -8,7 +8,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RCF</title>
+    <title>TCF</title>
     <link rel="stylesheet" href="<?php echo base_url(); ?>font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/plug-ins/f2c75b7247b/integration/bootstrap/3/dataTables.bootstrap.css">
@@ -130,7 +130,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </table>
                 <table class="table table-bordered" style=" font-size: 13px!important;">
                     <tr>
-                        <td class="text-center fw-bold">Performer:</td>
+                        <td class="text-center fw-bold">Performerd By:</td>
                     </tr>
                     <tr>
                         <td class="text-center">
@@ -143,21 +143,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     </select>
                                     <div id="showD1" class="signature1" style="display:flex; justify-content:center">
                                         <div class="signature-pad-container">
-                                            <div style="" class="signature-pad" id="signature-pad-1"></div><br>
-                                            <button type="button" class="border-1 bg-success text-light rsig-submitBtn" id="">Confirm Signature</button>
-                                            <button type="button" class="clear-btn1 border-1" id="">Clear</button>
+                                            <div class="signature-pad" id="signature-pad-1"></div><br>
+                                            <button type="button" class="btn btn-success text-light rsig-submitBtn" id="">Confirm Signature</button>
+                                            <button type="button" class="btn btn-danger clear-btn1 border-1" id="">Clear</button>
                                             <textarea type="text" class="signature-data-text1 d-none" name="performer_sign" value="" readonly></textarea>
                                         </div>
                                     </div><br>
                                     <div id="showU1" class="signature1 d-none">
                                         <input type="file" id="m-actual-image1" name="performer_sign_img" onchange="dataURLv(this,1)" style="margin-bottom:7px;" /><br>
                                         <img id="m-actual-image-res1" width="220" height="80" src="#" /><br>
-                                        <button class="border-1 mt-1" type="button" id="reset-image-val1">Remove</button>
+                                        <button class="btn btn-danger border-1 mt-1" type="button" id="reset-image-val1">Remove</button>
                                     </div>
 
                                     <div id="image-sig-r" class="d-none">
                                         <div class="rimg-signature"></div><br>
-                                        <button class="border-1 mt-1" type="button" id="rclear-image">Remove</button>
+                                        <button class="btn btn-danger mt-1" type="button" id="rclear-image">Remove</button>
                                     </div><br>
 
                                     <div class="input-group input-group-sm">
@@ -177,7 +177,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                     </tr>
                 </table>
-                <hr>
                 <br>
                 <input type="submit" name="save_record" style="padding:5px;width:100px;" class="btn btn-success" value="Save">
                 <br>
@@ -307,95 +306,95 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 });
             });
 
-        
+
         });
     </script>
     <script>
-            for (let id = 0; id < 4; id++) {
-                $('#main-sig-selection' + id).on('change', function() {
-                    var demovalue = $(this).val();
-                    $('div.signature' + id).addClass('d-none');
-                    $('#show' + demovalue).removeClass('d-none');
-                    $('#sign_type' + id).val(demovalue);
-                });
-
-                $('#reset-image-val' + id).on('click', function() {
-                    $('#m-actual-image' + id).val('');
-                    $('#m-actual-image-res' + id).removeAttr('src');
-                    $('#main-sig-selection' + id).attr('disabled', false)
-                });
-            }
-
-            $('#signature-pad-1').jSignature();
-            $('.clear-btn1').click(function() {
-                $(this).siblings('#signature-pad-1').jSignature('clear');
-                $(this).siblings('.signature-data-text1').val('');
-                $('#main-sig-selection1').attr('disabled', false)
-            });
-            $('#signature-pad-1').on('change', function() {
-                var signatureData = $(this).jSignature('getData', 'default');
-                $(this).siblings('.signature-data-text1').val(signatureData);
-                $('#main-sig-selection1').attr('disabled', true)
+        for (let id = 0; id < 4; id++) {
+            $('#main-sig-selection' + id).on('change', function() {
+                var demovalue = $(this).val();
+                $('div.signature' + id).addClass('d-none');
+                $('#show' + demovalue).removeClass('d-none');
+                $('#sign_type' + id).val(demovalue);
             });
 
-            $('.rsig-submitBtn').on('click', function() {
-                $('#image-sig-r').toggleClass('d-none')
-                $('#showD1').toggleClass('d-none')
-                var data = $('#signature-pad-1').jSignature('getData', 'default');
-                var image = new Image();
-                image.src = data;
-                $('.rimg-signature').append(image);
-            })
-
-            $('#rclear-image').on('click', function() {
-                $('#showD1').toggleClass('d-none')
-                $('#image-sig-r').toggleClass('d-none')
-                $('#signature-pad-1').jSignature('clear');
-                $('.signature-data-text1').val('');
-                $('.rimg-signature').empty();
-            })
-
-
-            // Approver
-            $('#signature-pad-2').jSignature();
-            $('.clear-btn2').click(function() {
-                $(this).siblings('#signature-pad-2').jSignature('clear');
-                $(this).siblings('.signature-data-text2').val('');
-                $('#main-sig-selection2').attr('disabled', false)
+            $('#reset-image-val' + id).on('click', function() {
+                $('#m-actual-image' + id).val('');
+                $('#m-actual-image-res' + id).removeAttr('src');
+                $('#main-sig-selection' + id).attr('disabled', false)
             });
-            $('#signature-pad-2').on('change', function() {
-                var signatureData = $(this).jSignature('getData', 'default');
-                $(this).siblings('.signature-data-text2').val(signatureData);
-                $('#main-sig-selection2').attr('disabled', true)
-            });
+        }
 
-            $('.asig-submitBtn').on('click', function() {
-                $('#image-sig-a').toggleClass('d-none')
-                $('#showD2').toggleClass('d-none')
-                var data = $('#signature-pad-2').jSignature('getData', 'default');
-                var image = new Image();
-                image.src = data;
-                $('.aimg-signature').append(image);
-            })
+        $('#signature-pad-1').jSignature();
+        $('.clear-btn1').click(function() {
+            $(this).siblings('#signature-pad-1').jSignature('clear');
+            $(this).siblings('.signature-data-text1').val('');
+            $('#main-sig-selection1').attr('disabled', false)
+        });
+        $('#signature-pad-1').on('change', function() {
+            var signatureData = $(this).jSignature('getData', 'default');
+            $(this).siblings('.signature-data-text1').val(signatureData);
+            $('#main-sig-selection1').attr('disabled', true)
+        });
 
-            $('#aclear-image').on('click', function() {
-                $('#showD2').toggleClass('d-none')
-                $('#image-sig-a').toggleClass('d-none')
-                $('#signature-pad-2').jSignature('clear');
-                $('.signature-data-text2').val('');
-                $('.aimg-signature').empty();
-            })
+        $('.rsig-submitBtn').on('click', function() {
+            $('#image-sig-r').toggleClass('d-none')
+            $('#showD1').toggleClass('d-none')
+            var data = $('#signature-pad-1').jSignature('getData', 'default');
+            var image = new Image();
+            image.src = data;
+            $('.rimg-signature').append(image);
+        })
 
-            function dataURLv(input, id) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
-                    reader.onload = function(e) {
-                        $("#m-actual-image-res" + id).attr('src', e.target.result);
-                        $('#main-sig-selection' + id).attr('disabled', true)
-                    }
-                    reader.readAsDataURL(input.files[0]);
+        $('#rclear-image').on('click', function() {
+            $('#showD1').toggleClass('d-none')
+            $('#image-sig-r').toggleClass('d-none')
+            $('#signature-pad-1').jSignature('clear');
+            $('.signature-data-text1').val('');
+            $('.rimg-signature').empty();
+        })
+
+
+        // Approver
+        $('#signature-pad-2').jSignature();
+        $('.clear-btn2').click(function() {
+            $(this).siblings('#signature-pad-2').jSignature('clear');
+            $(this).siblings('.signature-data-text2').val('');
+            $('#main-sig-selection2').attr('disabled', false)
+        });
+        $('#signature-pad-2').on('change', function() {
+            var signatureData = $(this).jSignature('getData', 'default');
+            $(this).siblings('.signature-data-text2').val(signatureData);
+            $('#main-sig-selection2').attr('disabled', true)
+        });
+
+        $('.asig-submitBtn').on('click', function() {
+            $('#image-sig-a').toggleClass('d-none')
+            $('#showD2').toggleClass('d-none')
+            var data = $('#signature-pad-2').jSignature('getData', 'default');
+            var image = new Image();
+            image.src = data;
+            $('.aimg-signature').append(image);
+        })
+
+        $('#aclear-image').on('click', function() {
+            $('#showD2').toggleClass('d-none')
+            $('#image-sig-a').toggleClass('d-none')
+            $('#signature-pad-2').jSignature('clear');
+            $('.signature-data-text2').val('');
+            $('.aimg-signature').empty();
+        })
+
+        function dataURLv(input, id) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    $("#m-actual-image-res" + id).attr('src', e.target.result);
+                    $('#main-sig-selection' + id).attr('disabled', true)
                 }
+                reader.readAsDataURL(input.files[0]);
             }
+        }
     </script>
 </body>
 

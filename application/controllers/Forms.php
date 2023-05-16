@@ -153,13 +153,14 @@ class Forms extends CI_Controller
 
 public function tcf_show(){
     $data = $this->Quires->tcf_show_where('tcf_list');
-
     $output='';
     foreach($data as $row){
+        $timestamp = strtotime($row->tcf_list_time);
+        $formattedTime = date('g:i A', $timestamp);
         $output .= '
             <tr>
             <td> <a id="' . $row->tcf_list_id  . '" class="tcf_delete_list" style="font-size:12px;color:red;"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>&nbsp' . $row->tcf_list_date . '</td>
-            <td>' . $row->tcf_list_time . '</td>
+            <td>' . $formattedTime. '</td>
             <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_checker_initial . '</td>
             <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_ther_id . '</td>
             <td class="tcf_editingtd" contenteditable="true" data-field="tcf_list_nist_ther" data-id="' . $row->tcf_list_id . '">' . $row->tcf_list_nist_ther . '</td>
@@ -203,7 +204,7 @@ public function tcf_show_list_review()
 {
     $data = $this->Quires->show_where_tcf('tcf_record');
     $output = '';
-    $table_ids = array(); // array to store the unique table_id values
+    $table_ids = array();
     foreach ($data as $row) {
   if (!in_array($row->tcf_record_table_id, $table_ids)) {
      $table_ids[] = $row->tcf_record_table_id;
@@ -232,7 +233,7 @@ public function tcf_show_list_review()
                     <td>' . sprintf("%03d", $row->tcf_list_id) . '</td>
                     <td><a  id="' . $row->tcf_record_table_id . '" >' . $row->record_created . '</a></td>
                     <td style="text-align:center;" disabled> 
-                    <a disabled style="font-size:20px;text-align:center">
+                    <a disabled style="font-size:20px;text-align:center;color:green">
                     <i class="fa fa-check" aria-hidden="true"></i>
                     </a>
                     </td>
@@ -243,8 +244,6 @@ public function tcf_show_list_review()
                     </td>
                 </tr>
             ';
-                
-
 }else if($row->ver_sign == '' && $row->rev_sign != ''){
         $output .= '
                 <tr>
@@ -405,10 +404,10 @@ public function tcf_show_list_review()
                     $ver_timestamp = strtotime($ver_date);
                     $ver_formattedDate = date('M j, Y', $ver_timestamp);
                 }
-
+             
                 $output .= '
         <tr>
-            <td>' .  $record->tcf_list_date . '</td>
+            <td> <a id="' . $record->tcf_list_id  . '" class="tcf_delete_list" style="font-size:12px;color:red;"><i class="fa fa-times-circle-o" aria-hidden="true"></i></a>&nbsp'.  $record->tcf_list_date . '</td>
             <td>' . $formatted_time . '</td>
             <td class="editingtd" contenteditable="true" data-field="tcf_list_checker_initial" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_checker_initial . '</td>
             <td class="editingtd" contenteditable="true" data-field="tcf_list_ther_id" data-id="' . $record->tcf_list_id . '">' . $record->tcf_list_ther_id . '</td>
@@ -421,7 +420,6 @@ public function tcf_show_list_review()
         } else {
             $output = '<tr><td colspan="8">Record not found</td></tr>';
         }
-
         $output .= '  
     </tbody>
     </table> 

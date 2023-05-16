@@ -12,6 +12,7 @@
 </head>
 <style>
     table td {
+        white-space: nowrap;
         border: 1px solid black;
     }
 
@@ -27,7 +28,6 @@
         transition: .2s;
     }
 </style>
-
 <body>
     <div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -199,6 +199,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jSignature/2.1.3/jSignature.min.js"></script>
 <script>
     $(document).ready(function() {
+        var url = '<?php echo base_url(); ?>';
         show_list_review();
 
         function show_list_review() {
@@ -346,6 +347,57 @@
                 }
             });
         });
+        $(document).on('blur', '.editingtd', function() {
+            var field = $(this).data('field');
+            var id = $(this).data('id');
+            var value = $(this).text();
+            $.ajax({
+                url: url + 'forms/tcf_edit_td',
+                method: 'POST',
+                data: {
+                    field: field,
+                    id: id,
+                    value: value
+                },
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(xhr, textStatus, errorThrown) {}
+            });
+        });
+        $(document).on('click', '.tcf_delete_list', function() {
+            var list_id = $(this).attr('id');
+            Swal.fire({
+                title: 'Are you sure you want to delete this record?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.post(url + 'forms/tc_delete_list', {
+                        list_id: list_id
+                    }, function(response) {
+                        if (response == 'success') {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Updated',
+                                text: 'List Deleted Successfully!',
+                                padding: '4em',
+                                showConfirmButton: false,
+                                timer: 1000
+                            });
+                            show_list_review();
+                        } else {
+                            alert('An error occurred while deleting the record.');
+                        }
+                    });
+                }
+            })
+        });
+
+
     });
 </script>
 <script>

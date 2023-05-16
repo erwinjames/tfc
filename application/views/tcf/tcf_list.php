@@ -12,6 +12,7 @@
 </head>
 <style>
     table td {
+        white-space: nowrap;
         border: 1px solid black;
     }
 
@@ -41,7 +42,7 @@
     <!-- veriefier end modal -->
 
     <center><img width="15%" src="<?php echo base_url('assets/images/logo.png'); ?>" alt="" srcset="">
-        <h4>Master List of Equipment Calibration Schedule Record</h4>
+        <h4>THERMOMETER CHECK FORM RECORD</h4>
     </center>
     <br>
     <br>
